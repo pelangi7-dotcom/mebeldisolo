@@ -271,9 +271,7 @@
       <h3>Detail Produk</h3>
       <button class="modal-close" onclick="closeModal()">&times;</button>
     </div>
-    <div class="modal-body" id="modal-body">
-      <!-- Content injected by JS -->
-    </div>
+    <div class="modal-body" id="modal-body"></div>
   </div>
 </div>
 
@@ -293,7 +291,9 @@
 <div class="toast" id="toast">Tersalin!</div>
 
 <script>
-  // ===== DATA PRODUK LENGKAP DENGAN SPESIFIKASI =====
+  // ============================================================
+  // DATA PRODUK LENGKAP DENGAN SPESIFIKASI
+  // ============================================================
   const products = [
     {
       id: 1, name: "Meja Kompor ROJO", price: 850000, oldPrice: null,
@@ -422,7 +422,9 @@
     }
   ];
 
-  // ===== RENDER PRODUCTS =====
+  // ============================================================
+  // RENDER PRODUK
+  // ============================================================
   function renderProducts() {
     const grid = document.getElementById('product-grid');
     grid.innerHTML = products.map(p => `
@@ -444,7 +446,9 @@
     `).join('');
   }
 
-  // ===== MODAL =====
+  // ============================================================
+  // MODAL DETAIL PRODUK
+  // ============================================================
   function openModal(id) {
     const p = products.find(x => x.id === id);
     if (!p) return;
@@ -495,12 +499,13 @@
     document.body.style.overflow = '';
   }
 
-  // Close on Escape key
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') closeModal();
   });
 
-  // ===== NAVIGATION =====
+  // ============================================================
+  // NAVIGASI
+  // ============================================================
   function showPage(page) {
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
     document.getElementById('page-' + page).classList.add('active');
@@ -516,7 +521,16 @@
   function copyProduct(name) {
     const p = products.find(x => x.name === name);
     if (!p) return;
-    const text = `*${p.name}*\nHarga: Rp ${p.price.toLocaleString('id-ID')}\n\nSpesifikasi:\n${Object.entries(p.specs).map(([k,v]) => `${k}: ${v}`).join('\n')}\n\nKeunggulan:\n${p.features.map(f => `✓ ${f}`).join('\n')}`;
+    const text = `*${p.name}*
+Harga: Rp ${p.price.toLocaleString('id-ID')}
+
+Spesifikasi:
+${Object.entries(p.specs).map(([k,v]) => `${k}: ${v}`).join('
+')}
+
+Keunggulan:
+${p.features.map(f => `✓ ${f}`).join('
+')}`;
     navigator.clipboard.writeText(text).then(() => showToast('Info produk disalin!'));
   }
 
@@ -527,18 +541,34 @@
     setTimeout(() => t.classList.remove('show'), 3000);
   }
 
-  // ===== INIT =====
-  renderProducts();
+  // ============================================================
+  // ████████████████████████████████████████████████████████████
+  // █                                                          █
+  // █   ⚠️  PENTING: GANTI URL DI BAWAH INI!                 █
+  // █                                                          █
+  // █   Cara:                                                  █
+  // █   1. Copy URL dari hasil deploy Google Apps Script       █
+  // █   2. Ganti teks XXXXXXXX di bawah dengan URL asli Anda  █
+  // █   3. Contoh hasil:                                       █
+  // █      'https://script.google.com/macros/s/AKfycb.../exec' █
+  // █                                                          █
+  // ████████████████████████████████████████████████████████████
+  // ============================================================
+  const GAS_URL_CUSTOMER = 'https://script.google.com/macros/s/AKfycbwx3H5V8LbiD1xUJpaTHYTfJ0-rP6ngkmLFXd4VBIR3XMraKPOHVyMfSH56Nse4oyz0BA/exec';
+  // ============================================================
+  // ☝️ GANTI XXXXXXXX DI ATAS DENGAN URL ANDA YANG SEBENARNYA
+  // ============================================================
 
-  // Auto-track referral clicks from URL
   const params = new URLSearchParams(window.location.search);
   const refCode = params.get('ref');
-  if (refCode) {
-    const gasUrl = localStorage.getItem('mebeldisolo_gas_url');
-    if (gasUrl) {
-      fetch(gasUrl + '?action=trackClick&ref=' + encodeURIComponent(refCode)).catch(()=>{});
-    }
+  if (refCode && GAS_URL_CUSTOMER && GAS_URL_CUSTOMER.includes('script.google.com')) {
+    fetch(GAS_URL_CUSTOMER + '?action=trackClick&ref=' + encodeURIComponent(refCode))
+      .then(() => console.log('Referral click tracked:', refCode))
+      .catch(() => console.log('Tracking failed'));
   }
+
+  // Init
+  renderProducts();
 </script>
 
 </body>
