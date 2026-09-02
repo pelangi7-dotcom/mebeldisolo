@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MebeldiSolo.com - Pelangi Furniture & Homeware</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='14' fill='%23c41e3a'/%3E%3Cpath d='M20 68 Q20 22 50 22 Q80 22 80 68' stroke='%23ffd700' stroke-width='7' fill='none' stroke-linecap='round'/%3E%3Cpath d='M32 68 Q32 34 50 34 Q68 34 68 68' stroke='%23ffd700' stroke-width='5' fill='none' stroke-linecap='round'/%3E%3Ccircle cx='50' cy='52' r='9' fill='%23ffd700'/%3E%3Ccircle cx='50' cy='52' r='3.5' fill='%23c41e3a'/%3E%3C/svg%3E">
+  <style>
+    :root {
+      --primary: #c41e3a; --primary-dark: #a01830; --gold: #ffd700;
+      --text: #1a1a1a; --text-secondary: #666; --text-muted: #999;
+      --bg: #ffffff; --bg-light: #f8f9fa; --border: #e5e5e5;
+      --radius: 10px; --shadow: 0 2px 8px rgba(0,0,0,0.06); --shadow-lg: 0 8px 30px rgba(0,0,0,0.1);
+      --font: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: var(--font); color: var(--text); line-height: 1.6; background: var(--bg); }
+
+    .navbar { display: flex; align-items: center; justify-content: space-between; padding: 14px 24px; border-bottom: 1px solid var(--border); background: #fff; position: sticky; top: 0; z-index: 100; }
+    .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .brand svg { width: 40px; height: 40px; }
+    .brand h1 { font-size: 18px; font-weight: 600; color: var(--primary); line-height: 1.1; }
+    .brand span { font-size: 10px; color: var(--text-secondary); letter-spacing: 0.5px; }
+    .nav-links { display: flex; gap: 4px; }
+    .nav-link { padding: 8px 16px; border-radius: 8px; font-size: 14px; font-weight: 500; cursor: pointer; border: none; background: transparent; color: var(--text-secondary); transition: all 0.2s; text-decoration: none; }
+    .nav-link:hover, .nav-link.active { background: var(--bg-light); color: var(--text); }
+    .nav-link.active { color: var(--primary); }
+
+    .page { display: none; animation: fadeIn 0.3s ease; }
+    .page.active { display: block; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+    .hero { background: linear-gradient(135deg, var(--primary) 0%, #e85d04 100%); color: white; padding: 80px 24px; text-align: center; }
+    .hero h2 { font-size: 36px; font-weight: 600; margin-bottom: 14px; }
+    .hero p { font-size: 17px; opacity: 0.95; max-width: 560px; margin: 0 auto 28px; }
+    .btn { display: inline-block; padding: 12px 28px; background: white; color: var(--primary); text-decoration: none; font-weight: 600; border-radius: var(--radius); border: none; cursor: pointer; font-size: 14px; transition: all 0.2s; }
+    .btn:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); }
+    .btn-outline { background: transparent; color: white; border: 2px solid rgba(255,255,255,0.5); }
+    .btn-outline:hover { background: rgba(255,255,255,0.1); border-color: white; }
+    .btn-primary { background: var(--primary); color: white; }
+    .btn-primary:hover { background: var(--primary-dark); }
+    .btn-sm { padding: 8px 16px; font-size: 13px; }
+
+    .section { padding: 60px 24px; max-width: 1100px; margin: 0 auto; }
+    .section-title { font-size: 26px; font-weight: 600; text-align: center; margin-bottom: 40px; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; }
+    .card { background: var(--bg); border: 1px solid var(--border); border-radius: 12px; padding: 28px; text-align: center; transition: all 0.2s; cursor: pointer; }
+    .card:hover { border-color: var(--primary); transform: translateY(-4px); box-shadow: var(--shadow-lg); }
+    .card-icon { width: 52px; height: 52px; margin: 0 auto 14px; background: #fff5f5; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 22px; }
+    .card h3 { font-size: 15px; font-weight: 600; margin-bottom: 6px; }
+    .card p { font-size: 13px; color: var(--text-secondary); }
+
+    .product { background: white; border: 1px solid var(--border); border-radius: 12px; overflow: hidden; transition: all 0.2s; cursor: pointer; }
+    .product:hover { box-shadow: var(--shadow-lg); }
+    .product-img { height: 180px; background: linear-gradient(135deg, #f0f0f0, #e0e0e0); display: flex; align-items: center; justify-content: center; color: var(--text-muted); font-size: 13px; position: relative; }
+    .product-badge { position: absolute; top: 12px; left: 12px; background: var(--primary); color: white; padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 600; }
+    .product-info { padding: 18px; }
+    .product-info h4 { font-size: 15px; font-weight: 600; margin-bottom: 4px; }
+    .price { color: var(--primary); font-weight: 700; font-size: 17px; }
+    .price-old { text-decoration: line-through; color: var(--text-muted); font-size: 13px; margin-left: 6px; }
+    .product-desc { font-size: 12px; color: var(--text-secondary); margin-top: 6px; }
+    .product .view-detail { display: inline-block; margin-top: 10px; padding: 6px 14px; background: var(--bg-light); color: var(--primary); border-radius: 6px; font-size: 12px; font-weight: 600; }
+
+    .about-box { background: var(--bg-light); border-radius: 16px; padding: 40px; display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: center; }
+    .about-box h3 { font-size: 22px; font-weight: 600; margin-bottom: 14px; }
+    .about-box p { color: var(--text-secondary); font-size: 14px; margin-bottom: 10px; }
+    .tagline { display: inline-flex; gap: 8px; margin-top: 14px; flex-wrap: wrap; }
+    .tagline span { background: var(--primary); color: white; padding: 5px 14px; border-radius: 20px; font-size: 12px; font-weight: 600; }
+    .about-visual { background: linear-gradient(135deg, var(--primary), #e85d04); border-radius: 12px; height: 200px; display: flex; align-items: center; justify-content: center; color: white; font-size: 15px; font-weight: 600; text-align: center; }
+
+    .contact-box { background: var(--bg-light); border-radius: 16px; padding: 40px; text-align: center; }
+    .contact-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 24px; margin-top: 28px; }
+    .contact-item { padding: 20px; }
+    .contact-item strong { display: block; margin-bottom: 6px; font-size: 14px; }
+    .contact-item span { color: var(--text-secondary); font-size: 13px; }
+    .contact-item a { color: var(--primary); text-decoration: none; }
+    .contact-item a:hover { text-decoration: underline; }
+
+    footer { background: #111; color: #888; padding: 40px 24px 24px; text-align: center; }
+    footer .brand { justify-content: center; margin-bottom: 12px; }
+    footer .brand h1 { color: #ff6b6b; }
+    footer p { font-size: 12px; }
+    footer .socials { display: flex; justify-content: center; gap: 20px; margin-top: 16px; }
+    footer .socials a { color: #888; text-decoration: none; font-size: 13px; }
+    footer .socials a:hover { color: white; }
+
+    .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(100px); background: var(--text); color: white; padding: 12px 24px; border-radius: var(--radius); font-size: 13px; opacity: 0; transition: all 0.3s; z-index: 200; box-shadow: var(--shadow-lg); }
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+    /* ===== MODAL DETAIL PRODUK ===== */
+    .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 300; display: none; align-items: center; justify-content: center; padding: 20px; backdrop-filter: blur(4px); }
+    .modal-overlay.active { display: flex; }
+    .modal { background: white; border-radius: 16px; max-width: 720px; width: 100%; max-height: 90vh; overflow-y: auto; box-shadow: var(--shadow-lg); animation: modalIn 0.3s ease; }
+    @keyframes modalIn { from { opacity: 0; transform: scale(0.95) translateY(10px); } to { opacity: 1; transform: scale(1) translateY(0); } }
+    .modal-header { display: flex; align-items: center; justify-content: space-between; padding: 20px 24px; border-bottom: 1px solid var(--border); }
+    .modal-header h3 { font-size: 18px; font-weight: 600; }
+    .modal-close { width: 32px; height: 32px; border-radius: 50%; border: none; background: var(--bg-light); color: var(--text-secondary); font-size: 18px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
+    .modal-close:hover { background: var(--border); color: var(--text); }
+    .modal-body { padding: 24px; }
+    .modal-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+    .modal-img { background: linear-gradient(135deg, #f0f0f0, #e0e0e0); border-radius: 12px; height: 260px; display: flex; align-items: center; justify-content: center; color: var(--text-muted); font-size: 14px; }
+    .modal-info h4 { font-size: 20px; font-weight: 600; margin-bottom: 8px; }
+    .modal-price { font-size: 24px; font-weight: 700; color: var(--primary); margin-bottom: 4px; }
+    .modal-price-old { font-size: 14px; color: var(--text-muted); text-decoration: line-through; margin-left: 8px; }
+    .modal-desc { color: var(--text-secondary); font-size: 14px; margin: 12px 0 16px; line-height: 1.7; }
+    .modal-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+
+    .spec-table { width: 100%; border-collapse: collapse; font-size: 13px; margin-top: 16px; }
+    .spec-table th, .spec-table td { padding: 10px 12px; text-align: left; border-bottom: 1px solid var(--border); }
+    .spec-table th { background: var(--bg-light); font-weight: 600; color: var(--text-secondary); font-size: 12px; width: 140px; }
+    .spec-table td { color: var(--text); }
+    .spec-section { margin-top: 20px; }
+    .spec-section h5 { font-size: 14px; font-weight: 600; margin-bottom: 10px; color: var(--primary); }
+    .spec-list { list-style: none; padding: 0; }
+    .spec-list li { padding: 6px 0; font-size: 13px; color: var(--text-secondary); display: flex; align-items: flex-start; gap: 8px; }
+    .spec-list li::before { content: "✓"; color: var(--success); font-weight: 700; flex-shrink: 0; }
+
+    @media (max-width: 768px) {
+      .hero h2 { font-size: 26px; }
+      .about-box { grid-template-columns: 1fr; }
+      .navbar { padding: 12px 16px; }
+      .nav-links { gap: 2px; }
+      .nav-link { padding: 6px 10px; font-size: 13px; }
+      .section { padding: 40px 16px; }
+      .modal-layout { grid-template-columns: 1fr; }
+      .modal-img { height: 200px; }
+    }
+  </style>
+<base target="_blank">
+</head>
+<body>
+
+<nav class="navbar">
+  <a href="#" class="brand" onclick="showPage('home'); return false;">
+    <svg viewBox="0 0 100 100" fill="none"><rect width="100" height="100" rx="14" fill="#c41e3a"/><path d="M20 68 Q20 22 50 22 Q80 22 80 68" stroke="#ffd700" stroke-width="7" fill="none" stroke-linecap="round"/><path d="M32 68 Q32 34 50 34 Q68 34 68 68" stroke="#ffd700" stroke-width="5" fill="none" stroke-linecap="round"/><circle cx="50" cy="52" r="9" fill="#ffd700"/><circle cx="50" cy="52" r="3.5" fill="#c41e3a"/></svg>
+    <div><h1>PELANGI</h1><span>FURNITURE & HOMEWARE</span></div>
+  </a>
+  <div class="nav-links">
+    <button class="nav-link active" data-page="home" onclick="showPage('home')">Beranda</button>
+    <button class="nav-link" data-page="products" onclick="showPage('products')">Produk</button>
+    <button class="nav-link" data-page="contact" onclick="showPage('contact')">Kontak</button>
+  </div>
+</nav>
+
+<!-- HOME -->
+<div class="page active" id="page-home">
+  <section class="hero">
+    <h2>Solusi Kebutuhan Rumah Tangga Anda</h2>
+    <p>Toko Mebel Pelangi Solo — furniture berkualitas dengan harga terjangkau. Ramah. Pepak. Murah.</p>
+    <a href="#products" class="btn" onclick="showPage('products'); return false;">Lihat Katalog</a>
+  </section>
+
+  <section class="section">
+    <h2 class="section-title">Kategori Produk</h2>
+    <div class="grid">
+      <div class="card" onclick="showPage('products')">
+        <div class="card-icon">🛏️</div>
+        <h3>Kamar Tidur</h3>
+        <p>Kasur, springbed, lemari pakaian, meja rias, dan ranjang anak</p>
+      </div>
+      <div class="card" onclick="showPage('products')">
+        <div class="card-icon">🍳</div>
+        <h3>Dapur</h3>
+        <p>Kitchen set, meja kompor, rak piring, kabinet, dan perabot dapur</p>
+      </div>
+      <div class="card" onclick="showPage('products')">
+        <div class="card-icon">🛋️</div>
+        <h3>Ruang Tamu</h3>
+        <p>Sofa, meja tamu, rak TV, credenza, dan bufet</p>
+      </div>
+      <div class="card" onclick="showPage('products')">
+        <div class="card-icon">👶</div>
+        <h3>Furniture Anak</h3>
+        <p>Lemari karakter, tempat tidur anak, meja belajar, dan loker</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" style="background: var(--bg-light); margin: 0; max-width: 100%;">
+    <div style="max-width: 1100px; margin: 0 auto;">
+      <h2 class="section-title">Mengapa Memilih Pelangi?</h2>
+      <div class="grid">
+        <div class="card" style="text-align:left;">
+          <h3 style="color: var(--primary); margin-bottom: 8px;">✓ Harga Terjangkau</h3>
+          <p>Furniture berkualitas dengan harga yang bersahabat untuk semua kalangan.</p>
+        </div>
+        <div class="card" style="text-align:left;">
+          <h3 style="color: var(--primary); margin-bottom: 8px;">✓ Produk Lengkap</h3>
+          <p>Mulai dari furniture rumah tangga hingga kebutuhan kantor tersedia lengkap.</p>
+        </div>
+        <div class="card" style="text-align:left;">
+          <h3 style="color: var(--primary); margin-bottom: 8px;">✓ Pelayanan Ramah</h3>
+          <p>Tim kami siap membantu memilih furniture yang tepat untuk kebutuhan Anda.</p>
+        </div>
+        <div class="card" style="text-align:left;">
+          <h3 style="color: var(--primary); margin-bottom: 8px;">✓ Bisa COD / Kirim</h3>
+          <p>Melayani pengiriman ke seluruh area Solo dan sekitarnya.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="about-box">
+      <div>
+        <h3>Tentang Pelangi Furniture</h3>
+        <p>Pelangi Furniture & Homeware adalah toko mebel terpercaya di Solo yang telah melayani kebutuhan rumah tangga masyarakat selama bertahun-tahun.</p>
+        <p>Kami menyediakan berbagai macam furniture mulai dari gaya klasik hingga modern minimalis dengan harga yang bersaing.</p>
+        <div class="tagline"><span>RAMAH</span><span>PEPAK</span><span>MURAH</span></div>
+      </div>
+      <div class="about-visual">
+        <svg width="80" height="80" viewBox="0 0 100 100" fill="none"><rect width="100" height="100" rx="14" fill="rgba(255,255,255,0.2)"/><path d="M20 68 Q20 22 50 22 Q80 22 80 68" stroke="#ffd700" stroke-width="7" fill="none" stroke-linecap="round"/><path d="M32 68 Q32 34 50 34 Q68 34 68 68" stroke="#ffd700" stroke-width="5" fill="none" stroke-linecap="round"/><circle cx="50" cy="52" r="9" fill="#ffd700"/><circle cx="50" cy="52" r="3.5" fill="#c41e3a"/></svg>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- PRODUCTS -->
+<div class="page" id="page-products">
+  <section class="hero" style="padding: 50px 24px;">
+    <h2>Katalog Produk</h2>
+    <p>Pilihan furniture terbaik untuk rumah Anda. Klik produk untuk lihat detail & spesifikasi.</p>
+  </section>
+  <section class="section">
+    <div class="grid" id="product-grid"></div>
+  </section>
+</div>
+
+<!-- CONTACT -->
+<div class="page" id="page-contact">
+  <section class="hero" style="padding: 50px 24px;">
+    <h2>Hubungi Kami</h2>
+    <p>Siap membantu kebutuhan furniture rumah Anda</p>
+  </section>
+  <section class="section">
+    <div class="contact-box">
+      <div class="contact-grid">
+        <div class="contact-item">
+          <strong>📍 Alamat Showroom</strong>
+          <span>Jl. Dr. Rajiman No.661 B<br>Pajang, Laweyan<br>Surakarta, Jawa Tengah</span>
+        </div>
+        <div class="contact-item">
+          <strong>📞 WhatsApp / Telepon</strong>
+          <span><a href="https://wa.me/6289523047318" target="_blank">0895-2304-7318</a></span>
+        </div>
+        <div class="contact-item">
+          <strong>🛒 Tokopedia</strong>
+          <span><a href="https://www.tokopedia.com/pelangifurnihome" target="_blank">Pelangifurnihome</a></span>
+        </div>
+        <div class="contact-item">
+          <strong>📸 Instagram</strong>
+          <span><a href="https://instagram.com/pelangifurnihome" target="_blank">@pelangifurnihome</a></span>
+        </div>
+        <div class="contact-item">
+          <strong>🕐 Jam Operasional</strong>
+          <span>Senin - Sabtu: 08.00 - 17.00<br>Minggu: 09.00 - 15.00</span>
+        </div>
+        <div class="contact-item">
+          <strong>📧 Email</strong>
+          <span><a href="mailto:pelangifurnihome@gmail.com">pelangifurnihome@gmail.com</a></span>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- MODAL DETAIL PRODUK -->
+<div class="modal-overlay" id="modal-overlay" onclick="closeModal(event)">
+  <div class="modal" id="modal" onclick="event.stopPropagation()">
+    <div class="modal-header">
+      <h3>Detail Produk</h3>
+      <button class="modal-close" onclick="closeModal()">&times;</button>
+    </div>
+    <div class="modal-body" id="modal-body">
+      <!-- Content injected by JS -->
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="brand" style="justify-content:center; margin-bottom:12px;">
+    <svg width="36" height="36" viewBox="0 0 100 100" fill="none"><rect width="100" height="100" rx="14" fill="#c41e3a"/><path d="M20 68 Q20 22 50 22 Q80 22 80 68" stroke="#ffd700" stroke-width="7" fill="none" stroke-linecap="round"/><path d="M32 68 Q32 34 50 34 Q68 34 68 68" stroke="#ffd700" stroke-width="5" fill="none" stroke-linecap="round"/><circle cx="50" cy="52" r="9" fill="#ffd700"/><circle cx="50" cy="52" r="3.5" fill="#c41e3a"/></svg>
+    <div><h1 style="color:#ff6b6b; font-size:16px;">PELANGI</h1><span style="color:#666;">FURNITURE & HOMEWARE</span></div>
+  </div>
+  <p>© 2026 MebeldiSolo.com — Toko Mebel Pelangi Solo. Semua hak dilindungi.</p>
+  <div class="socials">
+    <a href="https://www.tokopedia.com/pelangifurnihome" target="_blank">Tokopedia</a>
+    <a href="https://instagram.com/pelangifurnihome" target="_blank">Instagram</a>
+    <a href="https://wa.me/6289523047318" target="_blank">WhatsApp</a>
+  </div>
+</footer>
+
+<div class="toast" id="toast">Tersalin!</div>
+
+<script>
+  // ===== DATA PRODUK LENGKAP DENGAN SPESIFIKASI =====
+  const products = [
+    {
+      id: 1, name: "Meja Kompor ROJO", price: 850000, oldPrice: null,
+      badge: "Best Seller", category: "Dapur",
+      shortDesc: "Tahan karat & kokoh, cocok untuk dapur sehari-hari.",
+      fullDesc: "Meja Kompor ROJO adalah solusi praktis untuk dapur Anda. Terbuat dari aluminium berkualitas tinggi yang tahan karat dan anti rayap. Desain minimalis dengan 3 pintu kaca buram memberikan kesan elegan sekaligus fungsional.",
+      specs: {
+        "Dimensi": "80 x 40 x 85 cm (P x L x T)",
+        "Material": "Aluminium frame, pintu kaca buram",
+        "Rak": "2 susun dalam + 1 laci bawah",
+        "Berat": "12 kg",
+        "Warna": "Silver / Putih",
+        "Garansi": "1 tahun"
+      },
+      features: ["Tahan karat & anti rayap", "Konstruksi kokoh & stabil", "Mudah dibersihkan", "Pemasangan praktis (knock down)", "Cocok untuk kompor gas 2 tungku"]
+    },
+    {
+      id: 2, name: "Lemari SCOC Kids", price: 1250000, oldPrice: 1450000,
+      badge: "Promo", category: "Furniture Anak",
+      shortDesc: "Desain karakter anak, free meja OKT. Material plastik tebal & aman.",
+      fullDesc: "Lemari SCOC Kids dengan desain karakter lucu yang disukai anak-anak. Terbuat dari plastik PP tebal yang aman, tidak berbau, dan tahan benturan. Setiap pembelian mendapatkan FREE Meja OKT serasi.",
+      specs: {
+        "Dimensi": "60 x 40 x 125 cm (P x L x T)",
+        "Material": "Plastik PP tebal (food grade)",
+        "Susun": "4 laci + 1 gantungan",
+        "Berat": "8 kg",
+        "Warna": "Biru Frozen / Pink Hello Kitty",
+        "Garansi": "6 bulan"
+      },
+      features: ["Material aman untuk anak", "Anti tumpah & tahan benturan", "Roda bawah mudah dipindah", "Motif karakter menarik", "Free Meja OKT"]
+    },
+    {
+      id: 3, name: "Meja Setrika Activ Cozy", price: 320000, oldPrice: null,
+      badge: null, category: "Dapur",
+      shortDesc: "Solusi nyetrika anti ribet & praktis. Lipat mudah, ringan dibawa.",
+      fullDesc: "Meja Setrika Activ Cozy MS100 B dirancang untuk kenyamanan menyetrika. Permukaan anti slip, tinggi adjustable 6 level, dan bisa dilipat ringkas untuk penyimpanan minimalis.",
+      specs: {
+        "Dimensi terbuka": "110 x 33 x 90 cm (P x L x T)",
+        "Dimensi lipat": "110 x 33 x 8 cm",
+        "Material": "Besi hollow, cover busa tebal",
+        "Tinggi": "Adjustable 6 level (70-90 cm)",
+        "Berat": "4.5 kg",
+        "Warna": "Abu-abu / Biru",
+        "Garansi": "3 bulan"
+      },
+      features: ["Tinggi adjustable 6 level", "Permukaan anti slip", "Tempat setrika & hanger", "Lipat ringkas", "Roda bawah"]
+    },
+    {
+      id: 4, name: "Busa Royal Medicare + Divan Barca", price: 1713000, oldPrice: 2100000,
+      badge: "Paket", category: "Kamar Tidur",
+      shortDesc: "Paket tidur nyaman dengan promo spesial. Busa premium + divan kokoh.",
+      fullDesc: "Paket hemat berisi Busa Royal Medicare ukuran 160x200 cm dengan ketebalan 20cm dan Divan Barca rangka besi. Busa menggunakan teknologi rebonded foam yang awet dan tidak kempes.",
+      specs: {
+        "Ukuran busa": "160 x 200 x 20 cm",
+        "Material busa": "Rebonded foam density 25",
+        "Divan": "Rangka besi hollow 1x2", 
+        "Tinggi divan": "30 cm",
+        "Berat total": "35 kg",
+        "Warna": "Biru / Coklat / Abu",
+        "Garansi": "5 tahun (busa)"
+      },
+      features: ["Busa rebonded awet 5 tahun", "Divan besi anti karat", "Tidak perlu spring bed", "Free sarung busa", "Pengiriman gratis area Solo"]
+    },
+    {
+      id: 5, name: "Kitchen Set Minimalis 3 Pintu", price: 1450000, oldPrice: null,
+      badge: null, category: "Dapur",
+      shortDesc: "Rak dapur minimalis 3 pintu, finishing HPL anti air & tahan gores.",
+      fullDesc: "Kitchen set minimalis dengan 3 pintu dan 2 laci. Body menggunakan particle board 15mm dengan finishing HPL (High Pressure Laminate) yang tahan air, tahan panas, dan tahan gores.",
+      specs: {
+        "Dimensi": "120 x 40 x 80 cm (P x L x T)",
+        "Material body": "Particle board 15mm HPL",
+        "Pintu": "3 pintu + 2 laci",
+        "Rak dalam": "2 susun adjustable",
+        "Berat": "28 kg",
+        "Warna": "Putih salju / Coklat walnut / Hitam",
+        "Garansi": "2 tahun"
+      },
+      features: ["Finishing HPL anti air", "Tahan panas & gores", "Rak adjustable", "Engsel soft close", "Desain minimalis modern"]
+    },
+    {
+      id: 6, name: "Rak Piring Aluminium 2 Susun", price: 275000, oldPrice: null,
+      badge: null, category: "Dapur",
+      shortDesc: "Rak piring aluminium anti karat, 2 susun dengan tempat sendok & gelas.",
+      fullDesc: "Rak piring serbaguna dari aluminium dengan 2 susun rak piring, 1 tempat sendok/garpu, dan 1 tempat gelas. Konstruksi kuat dengan tiang aluminium tebal 1.2mm.",
+      specs: {
+        "Dimensi": "65 x 25 x 55 cm (P x L x T)",
+        "Material": "Aluminium 1.2mm + plastik ABS",
+        "Kapasitas": "~15 piring + 10 gelas",
+        "Berat": "3.2 kg",
+        "Warna": "Silver / Gold",
+        "Garansi": "6 bulan"
+      },
+      features: ["Anti karat & tahan lama", "Tempat sendok & gelas terpisah", "Tatakan anti air", "Mudah dibongkar pasang", "Cocok untuk dapur kecil"]
+    },
+    {
+      id: 7, name: "Sofa Minimalis 2 Seater", price: 2100000, oldPrice: null,
+      badge: null, category: "Ruang Tamu",
+      shortDesc: "Sofa minimalis 2 dudukan, busa empuk, cover fabric premium.",
+      fullDesc: "Sofa 2 seater dengan desain Scandinavian minimalis. Rangka kayu jati solid, busa D25 ultra soft, dan cover fabric premium yang bisa dilepas untuk dicuci.",
+      specs: {
+        "Dimensi": "140 x 75 x 80 cm (P x L x T)",
+        "Rangka": "Kayu jati solid",
+        "Busa": "D25 ultra soft (tidak kempes)",
+        "Cover": "Fabric premium (removable)",
+        "Berat": "22 kg",
+        "Warna": "Abu-abu / Navy / Mustard / Cream",
+        "Garansi": "2 tahun"
+      },
+      features: ["Desain Scandinavian", "Cover bisa dilepas cuci", "Busa anti kempes", "Rangka kayu jati solid", "Free bantal 2 pcs"]
+    },
+    {
+      id: 8, name: "Meja Belajar Anak + Kursi", price: 650000, oldPrice: null,
+      badge: null, category: "Furniture Anak",
+      shortDesc: "Set meja & kursi belajar anak, adjustable height, warna cerah.",
+      fullDesc: "Set meja belajar anak dengan kursi yang tingginya bisa disesuaikan. Meja dilengkapi lampu LED, tempat pensil, dan rak buku. Material plastik PP tebal yang aman.",
+      specs: {
+        "Dimensi meja": "70 x 45 x 55-70 cm (adjustable)",
+        "Dimensi kursi": "35 x 30 x 28-38 cm (adjustable)",
+        "Material": "Plastik PP tebal + besi",
+        "Fitur": "Lampu LED + tempat pensil + rak buku",
+        "Berat": "6 kg",
+        "Warna": "Pink / Biru / Hijau",
+        "Garansi": "1 tahun"
+      },
+      features: ["Tinggi meja & kursi adjustable", "Lampu LED built-in", "Tempat pensil & rak buku", "Material aman non-toxic", "Mudah dibersihkan"]
+    }
+  ];
+
+  // ===== RENDER PRODUCTS =====
+  function renderProducts() {
+    const grid = document.getElementById('product-grid');
+    grid.innerHTML = products.map(p => `
+      <div class="product" onclick="openModal(${p.id})">
+        <div class="product-img">
+          <span>📷 ${p.name}</span>
+          ${p.badge ? `<span class="product-badge">${p.badge}</span>` : ''}
+        </div>
+        <div class="product-info">
+          <h4>${p.name}</h4>
+          <div>
+            <span class="price">Rp ${p.price.toLocaleString('id-ID')}</span>
+            ${p.oldPrice ? `<span class="price-old">Rp ${p.oldPrice.toLocaleString('id-ID')}</span>` : ''}
+          </div>
+          <p class="product-desc">${p.shortDesc}</p>
+          <span class="view-detail">Lihat Detail & Spesifikasi →</span>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  // ===== MODAL =====
+  function openModal(id) {
+    const p = products.find(x => x.id === id);
+    if (!p) return;
+
+    const body = document.getElementById('modal-body');
+    body.innerHTML = `
+      <div class="modal-layout">
+        <div class="modal-img">
+          <span>📷 ${p.name}</span>
+        </div>
+        <div class="modal-info">
+          <div style="font-size:12px;color:var(--text-muted);margin-bottom:4px;">${p.category}</div>
+          <h4>${p.name}</h4>
+          <div class="modal-price">
+            Rp ${p.price.toLocaleString('id-ID')}
+            ${p.oldPrice ? `<span class="modal-price-old">Rp ${p.oldPrice.toLocaleString('id-ID')}</span>` : ''}
+          </div>
+          <p class="modal-desc">${p.fullDesc}</p>
+          <div class="modal-actions">
+            <button class="btn btn-primary" onclick="buyNow('${p.name}', ${p.price})">💬 Pesan via WhatsApp</button>
+            <button class="btn btn-outline" style="color:var(--primary);border-color:var(--primary);" onclick="copyProduct('${p.name}')">📋 Salin Info</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="spec-section">
+        <h5>📋 Spesifikasi Teknis</h5>
+        <table class="spec-table">
+          ${Object.entries(p.specs).map(([k, v]) => `<tr><th>${k}</th><td>${v}</td></tr>`).join('')}
+        </table>
+      </div>
+
+      <div class="spec-section">
+        <h5>✨ Keunggulan</h5>
+        <ul class="spec-list">
+          ${p.features.map(f => `<li>${f}</li>`).join('')}
+        </ul>
+      </div>
+    `;
+
+    document.getElementById('modal-overlay').classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeModal(e) {
+    if (e && e.target !== document.getElementById('modal-overlay')) return;
+    document.getElementById('modal-overlay').classList.remove('active');
+    document.body.style.overflow = '';
+  }
+
+  // Close on Escape key
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeModal();
+  });
+
+  // ===== NAVIGATION =====
+  function showPage(page) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.getElementById('page-' + page).classList.add('active');
+    document.querySelectorAll('.nav-link').forEach(l => l.classList.toggle('active', l.dataset.page === page));
+    window.scrollTo(0, 0);
+  }
+
+  function buyNow(product, price) {
+    const msg = 'Halo Pelangi Furniture, saya tertarik dengan produk: *' + product + '* (Rp ' + price.toLocaleString('id-ID') + '). Mohon info stok dan cara pemesanannya.';
+    window.open('https://wa.me/6289523047318?text=' + encodeURIComponent(msg), '_blank');
+  }
+
+  function copyProduct(name) {
+    const p = products.find(x => x.name === name);
+    if (!p) return;
+    const text = `*${p.name}*\nHarga: Rp ${p.price.toLocaleString('id-ID')}\n\nSpesifikasi:\n${Object.entries(p.specs).map(([k,v]) => `${k}: ${v}`).join('\n')}\n\nKeunggulan:\n${p.features.map(f => `✓ ${f}`).join('\n')}`;
+    navigator.clipboard.writeText(text).then(() => showToast('Info produk disalin!'));
+  }
+
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 3000);
+  }
+
+  // ===== INIT =====
+  renderProducts();
+
+  // Auto-track referral clicks from URL
+  const params = new URLSearchParams(window.location.search);
+  const refCode = params.get('ref');
+  if (refCode) {
+    const gasUrl = localStorage.getItem('mebeldisolo_gas_url');
+    if (gasUrl) {
+      fetch(gasUrl + '?action=trackClick&ref=' + encodeURIComponent(refCode)).catch(()=>{});
+    }
+  }
+</script>
+
+</body>
+</html>
