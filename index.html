@@ -203,6 +203,35 @@
     .reveal { opacity: 0; transform: translateY(24px); transition: all 0.6s ease; }
     .reveal.visible { opacity: 1; transform: translateY(0); }
 
+    
+    /* ===== BLOG ===== */
+    .blog-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px; }
+    .blog-card { background: var(--bg); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; transition: all 0.2s; cursor: pointer; }
+    .blog-card:hover { box-shadow: var(--shadow-lg); transform: translateY(-4px); }
+    .blog-img { height: 180px; background: linear-gradient(135deg, var(--bg-light), var(--border)); display: flex; align-items: center; justify-content: center; color: var(--text-muted); font-size: 14px; position: relative; }
+    .blog-tag { position: absolute; top: 12px; left: 12px; background: var(--primary); color: white; padding: 4px 12px; border-radius: 20px; font-size: 11px; font-weight: 600; }
+    .blog-content { padding: 20px; }
+    .blog-meta { font-size: 12px; color: var(--text-muted); margin-bottom: 8px; display: flex; gap: 12px; align-items: center; }
+    .blog-content h3 { font-size: 16px; font-weight: 600; margin-bottom: 8px; line-height: 1.4; }
+    .blog-content p { font-size: 13px; color: var(--text-secondary); line-height: 1.6; margin-bottom: 12px; }
+    .blog-readmore { font-size: 13px; font-weight: 600; color: var(--primary); text-decoration: none; }
+    .blog-readmore:hover { text-decoration: underline; }
+    .blog-tags { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 24px; }
+    .blog-tag-chip { padding: 6px 14px; border-radius: 20px; border: 1px solid var(--border); background: var(--bg); color: var(--text-secondary); font-size: 13px; cursor: pointer; transition: all 0.2s; }
+    .blog-tag-chip:hover, .blog-tag-chip.active { background: var(--primary); color: white; border-color: var(--primary); }
+    .blog-detail { max-width: 720px; margin: 0 auto; }
+    .blog-detail h2 { font-size: 24px; font-weight: 600; margin-bottom: 12px; }
+    .blog-detail .blog-meta { margin-bottom: 20px; }
+    .blog-detail p { font-size: 15px; color: var(--text-secondary); line-height: 1.8; margin-bottom: 16px; }
+    .blog-detail h3 { font-size: 18px; font-weight: 600; margin: 24px 0 12px; color: var(--primary); }
+    .blog-detail ul { padding-left: 20px; margin-bottom: 16px; }
+    .blog-detail ul li { font-size: 15px; color: var(--text-secondary); line-height: 1.8; margin-bottom: 8px; }
+    .blog-detail .tip-box { background: var(--bg-light); border-left: 4px solid var(--primary); padding: 16px 20px; border-radius: 0 12px 12px 0; margin: 20px 0; }
+    .blog-detail .tip-box strong { color: var(--primary); }
+    .blog-detail .tip-box p { margin: 0; font-size: 14px; }
+    .btn-back { display: inline-flex; align-items: center; gap: 6px; padding: 8px 16px; background: var(--bg-light); color: var(--text-secondary); border-radius: 8px; font-size: 13px; font-weight: 500; cursor: pointer; border: 1px solid var(--border); margin-bottom: 20px; }
+    .btn-back:hover { background: var(--border); }
+
     @media (max-width: 768px) {
       .hero h2 { font-size: 26px; }
       .stats-grid { grid-template-columns: repeat(2, 1fr); }
@@ -244,6 +273,7 @@
     <button class="nav-link active" data-page="home" onclick="showPage('home')">Beranda</button>
     <button class="nav-link" data-page="products" onclick="showPage('products')">Produk</button>
     <button class="nav-link" data-page="about" onclick="showPage('about')">Tentang</button>
+    <button class="nav-link" data-page="blog" onclick="showPage('blog')">Blog</button>
     <button class="nav-link" data-page="contact" onclick="showPage('contact')">Kontak</button>
   </div>
   <div class="nav-actions">
@@ -258,6 +288,7 @@
   <button class="nav-link" onclick="showPage('home'); toggleMobileMenu()">Beranda</button>
   <button class="nav-link" onclick="showPage('products'); toggleMobileMenu()">Produk</button>
   <button class="nav-link" onclick="showPage('about'); toggleMobileMenu()">Tentang</button>
+  <button class="nav-link" onclick="showPage('blog'); toggleMobileMenu()">Blog</button>
   <button class="nav-link" onclick="showPage('contact'); toggleMobileMenu()">Kontak</button>
 </div>
 
@@ -535,6 +566,30 @@
   </section>
 </div>
 
+<!-- BLOG -->
+<div class="page" id="page-blog">
+  <section class="hero" style="padding: 50px 24px;">
+    <h2>Blog & Tips</h2>
+    <p>Berita, panduan, dan tips seputar furniture untuk rumah Anda</p>
+  </section>
+  <section class="section">
+    <div class="blog-tags reveal" id="blog-tags">
+      <button class="blog-tag-chip active" data-tag="all" onclick="filterBlog('all')">Semua</button>
+      <button class="blog-tag-chip" data-tag="tips" onclick="filterBlog('tips')">Tips & Panduan</button>
+      <button class="blog-tag-chip" data-tag="berita" onclick="filterBlog('berita')">Berita</button>
+      <button class="blog-tag-chip" data-tag="perawatan" onclick="filterBlog('perawatan')">Perawatan</button>
+    </div>
+    <div class="blog-grid reveal" id="blog-grid"></div>
+  </section>
+</div>
+
+<!-- BLOG DETAIL -->
+<div class="page" id="page-blog-detail">
+  <section class="section" style="padding-top: 40px;">
+    <div class="blog-detail reveal" id="blog-detail-content"></div>
+  </section>
+</div>
+
 <!-- MODAL -->
 <div class="modal-overlay" id="modal-overlay" onclick="closeModal(event)">
   <div class="modal" id="modal" onclick="event.stopPropagation()">
@@ -552,6 +607,7 @@
     <a href="#" onclick="showPage('home'); return false;">Beranda</a>
     <a href="#" onclick="showPage('products'); return false;">Produk</a>
     <a href="#" onclick="showPage('about'); return false;">Tentang</a>
+    <a href="#" onclick="showPage('blog'); return false;">Blog</a>
     <a href="#" onclick="showPage('contact'); return false;">Kontak</a>
   </div>
   <div class="brand" style="justify-content:center; margin-bottom:12px;">
@@ -821,7 +877,8 @@
   // ============================================================
   function showPage(page) {
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-    document.getElementById('page-' + page).classList.add('active');
+    const target = document.getElementById('page-' + page);
+    if (target) target.classList.add('active');
     document.querySelectorAll('.nav-link').forEach(l => l.classList.toggle('active', l.dataset.page === page));
     window.scrollTo(0, 0);
     if (page === 'products') {
@@ -829,6 +886,9 @@
     }
     if (page === 'about') {
       setTimeout(animateStats, 300);
+    }
+    if (page === 'blog') {
+      renderBlog();
     }
   }
 
@@ -979,6 +1039,331 @@
     });
   }
 
+
+  // ============================================================
+  // DATA BLOG
+  // ============================================================
+  const blogPosts = [
+    {
+      id: 1,
+      title: "7 Tips Memilih Furniture Berkualitas untuk Rumah Minimalis",
+      excerpt: "Panduan lengkap memilih furniture yang tepat untuk rumah minimalis agar tetap fungsional tanpa memakan banyak ruang.",
+      tag: "tips",
+      date: "28 Agustus 2026",
+      readTime: "5 menit baca",
+      content: `
+        <button class="btn-back" onclick="showPage('blog')">← Kembali ke Blog</button>
+        <div class="blog-img" style="height: 280px; margin-bottom: 24px;"><span>📷 Ilustrasi Furniture Minimalis</span></div>
+        <h2>7 Tips Memilih Furniture Berkualitas untuk Rumah Minimalis</h2>
+        <div class="blog-meta"><span>📅 28 Agustus 2026</span><span>⏱️ 5 menit baca</span><span>🏷️ Tips & Panduan</span></div>
+
+        <p>Rumah minimalis memang sedang tren, tapi tantangannya adalah memilih furniture yang fungsional tanpa membuat ruangan terasa sempit. Berikut 7 tips dari Pelangi Furniture untuk Anda:</p>
+
+        <h3>1. Ukur Ruangan Terlebih Dahulu</h3>
+        <p>Jangan pernah membeli furniture tanpa mengukur ruangan. Catat panjang, lebar, dan tinggi ruangan. Pastikan ada jarak minimal 60 cm untuk lorong lalu lintas agar ruangan tetap nyaman dilewati.</p>
+
+        <div class="tip-box">
+          <strong>💡 Tips Pelangi:</strong>
+          <p>Gunakan selotip di lantai untuk membuat mockup ukuran furniture. Ini membantu Anda membayangkan seberapa besar furniture di ruangan.</p>
+        </div>
+
+        <h3>2. Pilih Furniture Multifungsi</h3>
+        <p>Furniture 2-in-1 sangat cocok untuk rumah minimalis. Contohnya: sofa bed, meja lipat, ottoman dengan storage, atau ranjang dengan laci bawah. Dengan satu item, Anda mendapatkan dua fungsi sekaligus.</p>
+
+        <h3>3. Perhatikan Material dan Finishing</h3>
+        <p>Furniture berkualitas tidak selalu mahal. Perhatikan:</p>
+        <ul>
+          <li><strong>Kayu solid</strong> lebih awet daripada particle board tipis</li>
+          <li><strong>Finishing HPL</strong> tahan air dan gores untuk area dapur</li>
+          <li><strong>Busa density 25+</strong> untuk sofa agar tidak cepat kempes</li>
+          <li><strong>Engsel soft-close</strong> menandakan kualitas kabinet yang baik</li>
+        </ul>
+
+        <h3>4. Warna Netral untuk Kesan Luas</h3>
+        <p>Warna putih, krem, abu-abu muda, dan kayu natural memantulkan cahaya lebih baik, menciptakan kesan ruangan yang lebih luas. Anda bisa menambahkan aksen warna melalui bantal, karpet, atau hiasan dinding yang mudah diganti.</p>
+
+        <h3>5. Vertical Storage adalah Kunci</h3>
+        <p>Manfaatkan dinding! Rak dinding, lemari tinggi, dan kabinet gantung menghemat lantai. Di dapur, gunakan rak piring 3 susun. Di kamar, pilih lemari pakaian full-height.</p>
+
+        <h3>6. Jangan Tergiur Harga Murah Semata</h3>
+        <p>Harga murah memang menggiurkan, tapi perhitungkan <em>cost per year</em>. Sofa Rp 1 juta yang rusak dalam 1 tahun (Rp 1 juta/tahun) lebih mahal daripada sofa Rp 3 juta yang awet 5 tahun (Rp 600 ribu/tahun).</p>
+
+        <h3>7. Beli Bertahap, Bukan Sekaligus</h3>
+        <p>Rumah minimalis tidak perlu diisi sekaligus. Prioritaskan kebutuhan: kamar tidur → dapur → ruang tamu. Beli furniture dasar dulu, tambahkan dekorasi pelan-pelan sesuai budget.</p>
+
+        <div class="tip-box">
+          <strong>🛒 Kesimpulan:</strong>
+          <p>Furniture berkualitas untuk rumah minimalis adalah yang <strong>fungsional, proporsional, dan tahan lama</strong>. Kunjungi showroom Pelangi Furniture di Solo untuk konsultasi gratis memilih furniture yang tepat!</p>
+        </div>
+      `
+    },
+    {
+      id: 2,
+      title: "Cara Merawat Sofa Fabric Agar Tetap Bersih dan Wangi",
+      excerpt: "Sofa fabric nyaman tapi rawan kotor. Pelajari teknik perawatan sederhana yang bisa Anda lakukan sendiri di rumah.",
+      tag: "perawatan",
+      date: "15 Agustus 2026",
+      readTime: "4 menit baca",
+      content: `
+        <button class="btn-back" onclick="showPage('blog')">← Kembali ke Blog</button>
+        <div class="blog-img" style="height: 280px; margin-bottom: 24px;"><span>📷 Perawatan Sofa</span></div>
+        <h2>Cara Merawat Sofa Fabric Agar Tetap Bersih dan Wangi</h2>
+        <div class="blog-meta"><span>📅 15 Agustus 2026</span><span>⏱️ 4 menit baca</span><span>🏷️ Perawatan</span></div>
+
+        <p>Sofa fabric memang nyaman dan estetik, tapi perawatannya butuh perhatian ekstra. Berikut panduan perawatan sofa fabric dari Pelangi Furniture:</p>
+
+        <h3>1. Vacuum Rutin Setiap Minggu</h3>
+        <p>Gunakan nozzle brush attachment pada vacuum cleaner. Bersihkan celah-celah sofa, area bawah bantal, dan permukaan secara menyeluruh. Debu yang menumpuk bisa merusak serat kain dan memicu alergi.</p>
+
+        <h3>2. Balik Bantal Sofa Setiap 2 Minggu</h3>
+        <p>Membalik bantal mencegah deformasi busa dan memastikan keausan merata. Jika sofa Anda memiliki cover removable, cuci sesuai instruksi label (biasanya 3-6 bulan sekali).</p>
+
+        <h3>3. Bersihkan Noda Segera</h3>
+        <p>Noda yang dibiarkan akan meresap dan sulit dihilangkan. Untuk noda ringan:</p>
+        <ul>
+          <li>Tekan dengan tisu kering untuk menyerap cairan (jangan digosok!)</li>
+          <li>Siapkan larutan sabun cuci piring cair + air hangat</li>
+          <li>Tepuk-tepuk dengan kain microfiber yang dibasuh larutan</li>
+          <li>Keringkan dengan hair dryer jarak 30 cm</li>
+        </ul>
+
+        <h3>4. Hindari Paparan Sinar Matahari Langsung</h3>
+        <p>Sinar UV bisa memudarkan warna kain dan membuatnya rapuh. Posisikan sofa menghindari jendela besar, atau gunakan tirai/tenda jika tidak bisa dihindari.</p>
+
+        <h3>5. Gunakan Fabric Protector Spray</h3>
+        <p>Semprotkan fabric protector setiap 6 bulan. Produk ini membentuk lapisan pelindung yang membuat noda tidak langsung meresap. Harganya sekitar Rp 100-200 ribu dan sangat worth it untuk sofa mahal.</p>
+
+        <div class="tip-box">
+          <strong>⚠️ Jangan Lakukan Ini:</strong>
+          <p>Hindari mesin cuci untuk sofa non-removable, jangan gunakan pemutih, dan jangan kucek noda dengan kasar — bisa merusak serat kain permanen.</p>
+        </div>
+
+        <p>Dengan perawatan rutin, sofa fabric Anda bisa awet 5-7 tahun. Pelangi Furniture menyediakan sofa dengan cover removable yang praktis untuk dicuci. Cek katalog kami!</p>
+      `
+    },
+    {
+      id: 3,
+      title: "Pelangi Furniture Luncurkan Koleksi Eco-Friendly 2026",
+      excerpt: "Inovasi terbaru dari Pelangi Furniture menggunakan material ramah lingkungan tanpa mengorbankan kualitas dan estetika.",
+      tag: "berita",
+      date: "5 Agustus 2026",
+      readTime: "3 menit baca",
+      content: `
+        <button class="btn-back" onclick="showPage('blog')">← Kembali ke Blog</button>
+        <div class="blog-img" style="height: 280px; margin-bottom: 24px;"><span>📷 Koleksi Eco-Friendly</span></div>
+        <h2>Pelangi Furniture Luncurkan Koleksi Eco-Friendly 2026</h2>
+        <div class="blog-meta"><span>📅 5 Agustus 2026</span><span>⏱️ 3 menit baca</span><span>🏷️ Berita</span></div>
+
+        <p>Surakarta — Pelangi Furniture & Homeware meluncurkan koleksi terbaru bertajuk <strong>"Green Living"</strong> pada awal Agustus 2026. Koleksi ini menawarkan furniture dengan material ramah lingkungan yang tetap stylish dan fungsional.</p>
+
+        <h3>Material Inovatif yang Digunakan</h3>
+        <ul>
+          <li><strong>Particle board E0 grade</strong> — emisi formaldehida paling rendah di kelasnya, aman untuk kamar anak</li>
+          <li><strong>Cat water-based</strong> — bebas VOC berbahaya, tidak berbau menyengat</li>
+          <li><strong>Kayu jati daur ulang</strong> — kayu bekas diolah kembali dengan proses khusus tanpa mengurangi kekuatan</li>
+          <li><strong>Packaging biodegradable</strong> — kemasan dari kardus daur ulang dan wrapping dari plastik singkong</li>
+        </ul>
+
+        <h3>Produk Unggulan Koleksi Green Living</h3>
+        <p>Beberapa produk andalan koleksi ini meliputi meja belajar anak dari particle board E0, rak buku modular dari kayu daur ulang, dan kitchen set dengan finishing water-based yang aman untuk kontak makanan.</p>
+
+        <div class="tip-box">
+          <strong>🌱 Komitmen Kami:</strong>
+          <p>Pelangi Furniture berkomitmen mengurangi jejak karbon. Untuk setiap 10 produk Green Living yang terjual, kami akan menanam 1 pohon di kawasan hutan lindung Gunung Lawu.</p>
+        </div>
+
+        <p>Koleksi Green Living sudah tersedia di showroom Jl. Dr. Rajiman No.661 B dan marketplace Tokopedia. Dapatkan diskon 10% untuk pembelian produk eco-friendly selama bulan Agustus 2026!</p>
+      `
+    },
+    {
+      id: 4,
+      title: "Panduan Memilih Kasur yang Tepat Sesuai Kebutuhan Tidur",
+      excerpt: "Tidur nyaman bergantung pada kasur yang tepat. Pelajari perbedaan busa, spring bed, dan latex untuk pilihan terbaik.",
+      tag: "tips",
+      date: "20 Juli 2026",
+      readTime: "6 menit baca",
+      content: `
+        <button class="btn-back" onclick="showPage('blog')">← Kembali ke Blog</button>
+        <div class="blog-img" style="height: 280px; margin-bottom: 24px;"><span>📷 Berbagai Jenis Kasur</span></div>
+        <h2>Panduan Memilih Kasur yang Tepat Sesuai Kebutuhan Tidur</h2>
+        <div class="blog-meta"><span>📅 20 Juli 2026</span><span>⏱️ 6 menit baca</span><span>🏷️ Tips & Panduan</span></div>
+
+        <p>Kasur yang salah bisa menyebabkan sakit punggung, insomnia, dan bangun tidak segar. Pelangi Furniture merangkum panduan memilih kasur berdasarkan jenis dan kebutuhan Anda:</p>
+
+        <h3>1. Kasur Busa (Foam)</h3>
+        <p><strong>Cocok untuk:</strong> Budget terbatas, penggunaan sementara, atau kamar tamu.</p>
+        <ul>
+          <li><strong>Busa rebonded (density 25+):</strong> Awet 5-7 tahun, tidak mudah kempes</li>
+          <li><strong>Busa biasa (density 18-20):</strong> Harga murah tapi kempes dalam 1-2 tahun</li>
+          <li><strong>Memory foam:</strong> Mengikuti kontur tubuh, cocok untuk penderita nyeri sendi</li>
+        </ul>
+
+        <h3>2. Spring Bed</h3>
+        <p><strong>Cocok untuk:</strong> Penggunaan harian, pasangan, atau yang suka kasur berpegas.</p>
+        <ul>
+          <li><strong>Pocket spring:</strong> Per pegas individual, tidak mengganggu pasangan saat bergerak</li>
+          <li><strong>Bonnell spring:</strong> Harga lebih terjangkau, tapi bisa berbunyi setelah lama</li>
+          <li><strong>Hybrid (spring + foam):</strong> Kombinasi terbaik, support dan kenyamanan optimal</li>
+        </ul>
+
+        <h3>3. Kasur Latex</h3>
+        <p><strong>Cocok untuk:</strong> Penderita alergi, yang suka kasur alami, dan budget tinggi.</p>
+        <ul>
+          <li>Alami, anti bakteri, dan tahan debu</li>
+          <li>Sangat awet (10-15 tahun)</li>
+          <li>Harga 2-3x lebih mahal dari busa</li>
+        </ul>
+
+        <h3>Tips Memilih Ukuran</h3>
+        <table class="spec-table" style="margin: 16px 0;">
+          <tr><th>Single</th><td>90x200 cm — Cocok untuk anak/remaja</td></tr>
+          <tr><th>Super Single</th><td>100x200 cm — Remaja atau dewasa kurus</td></tr>
+          <tr><th>Queen</th><td>160x200 cm — Pasangan standar</td></tr>
+          <tr><th>King</th><td>180x200 cm — Pasangan + 1 anak kecil</td></tr>
+        </table>
+
+        <div class="tip-box">
+          <strong>💡 Tes Kasur di Showroom:</strong>
+          <p>Datang ke showroom Pelangi Furniture dan tidurkan posisi favorit Anda selama 10-15 menit. Kasur yang tepat seharusnya tidak membuat punggung melengkung atau bahu terasa tertekan.</p>
+        </div>
+
+        <p>Pelangi Furniture menyediakan berbagai pilihan kasur mulai dari busa rebonded hingga paket spring bed lengkap dengan divan. Semua produk dilengkapi garansi dan bisa dicoba langsung di showroom.</p>
+      `
+    },
+    {
+      id: 5,
+      title: "5 Kesalahan Umum Saat Menata Dapur Minimalis",
+      excerpt: "Dapur kecil bisa tetap fungsional jika dihindari kesalahan-kesalahan layout dan pemilihan furniture berikut.",
+      tag: "tips",
+      date: "10 Juli 2026",
+      readTime: "4 menit baca",
+      content: `
+        <button class="btn-back" onclick="showPage('blog')">← Kembali ke Blog</button>
+        <div class="blog-img" style="height: 280px; margin-bottom: 24px;"><span>📷 Layout Dapur Minimalis</span></div>
+        <h2>5 Kesalahan Umum Saat Menata Dapur Minimalis</h2>
+        <div class="blog-meta"><span>📅 10 Juli 2026</span><span>⏱️ 4 menit baca</span><span>🏷️ Tips & Panduan</span></div>
+
+        <p>Dapur minimalis memang tricky. Salah tata letak, dapur jadi tidak fungsional dan bikin frustrasi saat memasak. Berikut 5 kesalahan yang sering terjadi dan solusinya:</p>
+
+        <h3>1. Mengabaikan Segitiga Kerja (Work Triangle)</h3>
+        <p>Segitiga kerja adalah jarak ideal antara kompor, wastafel, dan kulkas. Idealnya total jarak ketiganya 3.6-6.6 meter. Jika terlalu jauh, Anda capek bolak-balik. Jika terlalu dekat, ruangan terasa sempit dan berbahaya.</p>
+
+        <h3>2. Kurang Rak dan Storage Vertikal</h3>
+        <p>Kesalahan paling umum: membiarkan dinding kosong. Gunakan rak piring dinding, gantungan alat masak magnetic, dan kabinet tinggi sampai plafon. Vertical storage menggandakan kapasitas penyimpanan tanpa memakan lantai.</p>
+
+        <h3>3. Memilih Kitchen Set yang Terlalu Besar</h3>
+        <p>Kitchen set 3 meter mungkin terlihat mewah, tapi di dapur 2x2 meter? Bencana. Pilih kitchen set sesuai proporsi. Untuk dapur kecil, kitchen set 120-150 cm + rak dinding sudah cukup.</p>
+
+        <h3>4. Warna Gelap yang Membuat Sempit</h3>
+        <p>Warna gelap menyerap cahaya. Untuk dapur kecil, pilih warna putih, krem, atau abu-abu muda. Finishing glossy lebih baik dari matte karena memantulkan cahaya. Lantai keramik terang juga membantu.</p>
+
+        <h3>5. Tidak Memperhatikan Sirkulasi Udara</h3>
+        <p>Dapur tanpa ventilasi baik akan bau, lembab, dan berjamur. Pastikan ada jendela atau exhaust fan. Pilih kitchen set dengan pintu lubang angin atau rak terbuka agar sirkulasi tetap lancar.</p>
+
+        <div class="tip-box">
+          <strong>✅ Solusi Cepat dari Pelangi:</strong>
+          <p>Paket kitchen set minimalis 120 cm + rak piring aluminium 2 susun + meja kompor ROJO = solusi dapur fungsional di bawah Rp 2,5 juta. Semua tahan air, anti karat, dan knock-down (mudah pindah).</p>
+        </div>
+      `
+    },
+    {
+      id: 6,
+      title: "Cara Membersihkan Lemari Kayu Agar Bebas Rayap dan Jamur",
+      excerpt: "Lemari kayu perlu perawatan berkala. Simak cara membersihkan dan mencegah rayap agar furniture awet bertahun-tahun.",
+      tag: "perawatan",
+      date: "25 Juni 2026",
+      readTime: "5 menit baca",
+      content: `
+        <button class="btn-back" onclick="showPage('blog')">← Kembali ke Blog</button>
+        <div class="blog-img" style="height: 280px; margin-bottom: 24px;"><span>📷 Perawatan Lemari Kayu</span></div>
+        <h2>Cara Membersihkan Lemari Kayu Agar Bebas Rayap dan Jamur</h2>
+        <div class="blog-meta"><span>📅 25 Juni 2026</span><span>⏱️ 5 menit baca</span><span>🏷️ Perawatan</span></div>
+
+        <p>Lemari kayu adalah investasi jangka panjang. Dengan perawatan rutin, lemari kayu jati atau mahoni bisa awet 20-30 tahun. Berikut panduan perawatan dari Pelangi Furniture:</p>
+
+        <h3>1. Bersihkan Debu Secara Rutin</h3>
+        <p>Debu yang menumpuk bisa merusak finishing kayu dan menarik kelembaban. Bersihkan dengan kain microfiber kering setiap minggu. Untuk celah-celah, gunakan kuas halus atau vacuum cleaner dengan nozzle sempit.</p>
+
+        <h3>2. Gunakan Polish Kayu 3 Bulan Sekali</h3>
+        <p>Polish kayu (seperti beeswax atau minyak jati) melindungi permukaan dan mempertahankan kilau. Caranya:</p>
+        <ul>
+          <li>Bersihkan permukaan dari debu</li>
+          <li>Oleskan polish tipis merata dengan kain lembut</li>
+          <li>Diamkan 15-20 menit</li>
+          <li>Buff dengan kain bersih hingga mengkilap</li>
+        </ul>
+
+        <h3>3. Cegah Rayap dengan Ini</h3>
+        <p>Rayap adalah musuh utama furniture kayu. Pencegahan:</p>
+        <ul>
+          <li>Jangan letakkan lemari langsung menempel dinding luar (beri jarak 5-10 cm)</li>
+          <li>Pastikan ruangan berventilasi, kelembaban ideal 40-60%</li>
+          <li>Semprotkan anti rayap di sekitar kaki lemari setiap 6 bulan</li>
+          <li>Periksa secara berkala tanda-tanda serbuk kayu (frass) di lantai</li>
+        </ul>
+
+        <h3>4. Atasi Jamur dengan Cepat</h3>
+        <p>Jamur muncul karena kelembaban tinggi. Jika menemukan bintik putih/hijau:</p>
+        <ul>
+          <li>Segera pindahkan lemari ke area kering dan berventilasi</li>
+          <li>Lap dengan campuran cuka putih + air (1:1)</li>
+          <li>Keringkan dengan kipas angin atau hair dryer</li>
+          <li>Aplikasikan fungicide wood preservative</li>
+        </ul>
+
+        <div class="tip-box">
+          <strong>⚠️ Tanda Lemari Perlu Perhatian:</strong>
+          <p>Bau apek, pintu susah dibuka/tutup (kayu mengembang), permukaan lengket, atau suara "krek" dari dalam kayu. Segera periksa sebelum kerusakan menyebar.</p>
+        </div>
+
+        <p>Untuk Anda yang ingin menghindari masalah rayap, Pelangi Furniture menyediakan lemari dari material aluminium dan plastik PP yang 100% anti rayap. Pilihan praktis untuk area lembap!</p>
+      `
+    }
+  ];
+
+  let currentBlogTag = 'all';
+
+  function renderBlog() {
+    const grid = document.getElementById('blog-grid');
+    const filtered = currentBlogTag === 'all' 
+      ? blogPosts 
+      : blogPosts.filter(b => b.tag === currentBlogTag);
+
+    grid.innerHTML = filtered.map(post => `
+      <div class="blog-card" onclick="openBlogDetail(${post.id})">
+        <div class="blog-img">
+          <span>📷 ${post.title.substring(0, 20)}...</span>
+          <span class="blog-tag">${post.tag === 'tips' ? 'Tips & Panduan' : post.tag === 'berita' ? 'Berita' : 'Perawatan'}</span>
+        </div>
+        <div class="blog-content">
+          <div class="blog-meta">
+            <span>📅 ${post.date}</span>
+            <span>⏱️ ${post.readTime}</span>
+          </div>
+          <h3>${post.title}</h3>
+          <p>${post.excerpt}</p>
+          <span class="blog-readmore">Baca selengkapnya →</span>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  function filterBlog(tag) {
+    currentBlogTag = tag;
+    document.querySelectorAll('.blog-tag-chip').forEach(c => {
+      c.classList.toggle('active', c.dataset.tag === tag);
+    });
+    renderBlog();
+  }
+
+  function openBlogDetail(id) {
+    const post = blogPosts.find(b => b.id === id);
+    if (!post) return;
+    document.getElementById('blog-detail-content').innerHTML = post.content;
+    showPage('blog-detail');
+    window.scrollTo(0, 0);
+  }
+
   // ============================================================
   // REFERRAL TRACKING
   // ============================================================
@@ -995,7 +1380,8 @@
   // INIT
   // ============================================================
   initDots();
-  setTimeout(renderProducts, 800); // Simulate loading
+  setTimeout(renderProducts, 800);
+  renderBlog();
 </script>
 
 </body>
